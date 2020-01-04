@@ -1,17 +1,10 @@
 const fetchData = async searchTerm => {
-  try {
-    const response = await axios.get("https://api.punkapi.com/v2/beers/", {
-      params: {
-        beer_name: searchTerm
-      }
-    });
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      console.log(error);
+  const response = await axios.get("https://api.punkapi.com/v2/beers/", {
+    params: {
+      beer_name: searchTerm
     }
-    return [];
-  }
+  });
+  return response.data;
 };
 
 // helper function to delay search result
@@ -43,6 +36,10 @@ const dropdown = document.querySelector(".dropdown");
 const resultsWrapper = document.querySelector(".results");
 
 const onInput = async e => {
+  if (!e.target.value) {
+    return;
+  }
+
   const beers = await fetchData(e.target.value);
   if (!beers.length) {
     dropdown.classList.remove("is-active");
