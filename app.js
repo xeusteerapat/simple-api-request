@@ -22,7 +22,7 @@ const debounce = (callback, delay) => {
 
 const root = document.querySelector(".autocomplete");
 root.innerHTML = `
-    <label for="">Search for your right choice of Beer!</label>
+    <label for="">Search for your right choice of Beer!</label> or <button class="button is-success">Get Random Beer!</button>
     <input type="text" class="input">
     <div class="dropdown">
         <div class="dropdown-menu">
@@ -76,7 +76,20 @@ document.addEventListener("click", e => {
   }
 });
 
+const fetchRandomBeer = async () => {
+  const response = await axios.get("https://api.punkapi.com/v2/beers/random");
+  const randomBeer = response.data[0];
+  document.querySelector("#summary").innerHTML = beerTemplate(randomBeer);
+};
+
+const getRandomBeer = document.querySelector("button");
+getRandomBeer.addEventListener("click", fetchRandomBeer);
+
 const beerTemplate = beerDetail => {
+  if (beerDetail.image_url === null) {
+    beerDetail.image_url =
+      "https://p7.hiclipart.com/preview/1005/240/954/brewdog-craft-beer-for-the-people-brewdog-craft-beer-for-the-people-ale-punk-ipa-beer-thumbnail.jpg";
+  }
   return `
     <article class="media">
       <figure class="media-left">
